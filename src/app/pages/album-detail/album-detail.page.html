@@ -1,1 +1,45 @@
-<p>album-detail works!</p>
+<section class="container py-5">
+  <a routerLink="/catalog" class="small d-inline-block mb-4">&larr; Volver al catálogo</a>
+
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-brand" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  } @else if (album(); as album) {
+    <div class="row g-4 g-lg-5">
+      <div class="col-12 col-md-6 col-lg-5">
+        @if (album.coverArt) {
+          <img class="cover shadow-sm" [src]="album.coverArt" [alt]="album.title + ' de ' + album.artist">
+        } @else {
+          <div class="cover cover-empty">Sin portada</div>
+        }
+      </div>
+      <div class="col-12 col-md-6 col-lg-7">
+        <span class="badge badge-brand mb-3">{{ album.genre }}</span>
+        <h1 class="fw-bold text-uppercase mb-1">{{ album.title }}</h1>
+        <p class="lead text-body-secondary mb-4">{{ album.artist }}</p>
+
+        <p class="price display-6 mb-4">{{ album.price | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
+
+        <dl class="row mb-4">
+          <dt class="col-5 col-sm-4">Año</dt>
+          <dd class="col-7 col-sm-8">{{ album.year ?? 'Sin información' }}</dd>
+          <dt class="col-5 col-sm-4">Género</dt>
+          <dd class="col-7 col-sm-8">{{ album.genre }}</dd>
+          <dt class="col-5 col-sm-4">Disponibilidad</dt>
+          <dd class="col-7 col-sm-8">
+            @if (album.stock > 0) {
+              {{ album.stock }} {{ album.stock === 1 ? 'unidad' : 'unidades' }}
+            } @else {
+              <span class="text-danger fw-semibold">Agotado</span>
+            }
+          </dd>
+        </dl>
+      </div>
+    </div>
+  }
+</section>
