@@ -7,6 +7,7 @@ import { OrderHistory } from '../../components/order-history/order-history';
 import { ProfileUpdateRequest } from '../../models/profile';
 import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../services/auth.service';
+import { EMAIL_PATTERN } from '../../validators/email';
 import { PASSWORD_PATTERN, PASSWORD_RULES, matchFields, passwordStrength } from '../../validators/password';
 
 type Tab = 'data' | 'orders';
@@ -25,10 +26,11 @@ export class ProfilePage {
 
   protected readonly rules = PASSWORD_RULES;
   protected readonly passwordPattern = PASSWORD_PATTERN;
+  protected readonly emailPattern = EMAIL_PATTERN;
 
   protected readonly form = inject(NonNullableFormBuilder).group(
     {
-      email: [this.auth.profile()?.email ?? '', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      email: [this.auth.profile()?.email ?? '', [Validators.required, Validators.email, Validators.pattern(EMAIL_PATTERN), Validators.maxLength(100)]],
       password: ['', passwordStrength],
       confirmPassword: [''],
     },
