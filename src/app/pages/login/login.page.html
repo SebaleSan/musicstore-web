@@ -13,7 +13,7 @@
             <div class="mb-3">
               <label for="username" class="form-label">Usuario</label>
               <input id="username" type="text" class="form-control" formControlName="username"
-                autocomplete="username" [class.is-invalid]="invalid('username')">
+                required minlength="3" maxlength="50" autocomplete="username" [class.is-invalid]="invalid('username')">
               @if (invalid('username')) {
                 <div class="invalid-feedback">
                   @if (form.controls.username.hasError('required')) {
@@ -27,7 +27,8 @@
 
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input id="password" class="form-control" formControlName="password" autocomplete="current-password"
+              <input id="password" class="form-control" formControlName="password" required maxlength="100"
+                autocomplete="current-password"
                 [type]="showPassword() ? 'text' : 'password'" [class.is-invalid]="invalid('password')">
               @if (invalid('password')) {
                 <div class="invalid-feedback">La contraseña es obligatoria</div>
