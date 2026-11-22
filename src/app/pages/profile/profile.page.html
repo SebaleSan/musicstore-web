@@ -1,1 +1,31 @@
-<p>profile works!</p>
+<section class="container py-5">
+  <h1 class="section-title h2 mb-4">Mi perfil</h1>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="tab() === 'data'" (click)="tab.set('data')">Mis datos</button>
+    </li>
+    @if (!auth.isAdmin()) {
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="tab() === 'orders'" (click)="tab.set('orders')">Mis compras</button>
+      </li>
+    }
+  </ul>
+
+  @if (tab() === 'orders') {
+    <app-order-history />
+  } @else if (auth.profile(); as profile) {
+    <div class="row">
+      <div class="col-12 col-md-8 col-lg-6">
+        <dl class="row mb-0">
+          <dt class="col-4">Usuario</dt>
+          <dd class="col-8">{{ profile.username }}</dd>
+          <dt class="col-4">Correo</dt>
+          <dd class="col-8">{{ profile.email }}</dd>
+          <dt class="col-4">Rol</dt>
+          <dd class="col-8">{{ profile.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}</dd>
+        </dl>
+      </div>
+    </div>
+  }
+</section>

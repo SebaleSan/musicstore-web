@@ -9,7 +9,7 @@
             <p class="price h4 mb-4">{{ order.total | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
             <p class="mb-4">Enviaremos tu pedido a {{ order.shipping.address }}, {{ order.shipping.city }}.</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-              <a routerLink="/orders" class="btn btn-dark">Ver mis compras</a>
+              <a routerLink="/profile" [queryParams]="{ tab: 'orders' }" class="btn btn-dark">Ver mis compras</a>
               <a routerLink="/catalog" class="btn btn-outline-dark">Seguir comprando</a>
             </div>
           </div>
