@@ -1,1 +1,106 @@
-<p>checkout works!</p>
+<section class="container py-5">
+  @if (placed(); as order) {
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 text-center">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-5">
+            <h1 class="h3 fw-bold mb-3">¡Compra realizada!</h1>
+            <p class="text-body-secondary mb-1">Pedido N° {{ order.id }}</p>
+            <p class="price h4 mb-4">{{ order.total | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
+            <p class="mb-4">Enviaremos tu pedido a {{ order.shipping.address }}, {{ order.shipping.city }}.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <a routerLink="/orders" class="btn btn-dark">Ver mis compras</a>
+              <a routerLink="/catalog" class="btn btn-outline-dark">Seguir comprando</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else if (cart.items().length === 0) {
+    <div class="text-center py-5">
+      <p class="lead text-body-secondary mb-4">No hay productos en tu carrito.</p>
+      <a routerLink="/catalog" class="btn btn-dark">Ver catálogo</a>
+    </div>
+  } @else {
+    <h1 class="section-title h2 mb-4">Finalizar compra</h1>
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3">Datos de envío</h2>
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label for="fullName" class="form-label">Nombre completo</label>
+                  <input id="fullName" type="text" class="form-control" formControlName="fullName"
+                    required minlength="3" maxlength="100" autocomplete="name" [class.is-invalid]="error('fullName')">
+                  <div class="invalid-feedback">{{ error('fullName') }}</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="phone" class="form-label">Teléfono</label>
+                  <div class="input-group has-validation">
+                    <span class="input-group-text">+56</span>
+                    <input id="phone" type="tel" class="form-control" formControlName="phone" inputmode="numeric"
+                      required pattern="9[0-9]{8}" maxlength="9" placeholder="912345678" autocomplete="tel-national"
+                      [class.is-invalid]="error('phone')">
+                    <div class="invalid-feedback">{{ error('phone') }}</div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label for="address" class="form-label">Dirección</label>
+                  <input id="address" type="text" class="form-control" formControlName="address"
+                    required minlength="5" maxlength="150" placeholder="Calle, número, depto." autocomplete="street-address"
+                    [class.is-invalid]="error('address')">
+                  <div class="invalid-feedback">{{ error('address') }}</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="city" class="form-label">Comuna</label>
+                  <input id="city" type="text" class="form-control" formControlName="city"
+                    required minlength="3" maxlength="60" autocomplete="address-level2" [class.is-invalid]="error('city')">
+                  <div class="invalid-feedback">{{ error('city') }}</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="region" class="form-label">Región</label>
+                  <select id="region" class="form-select" formControlName="region" required
+                    [class.is-invalid]="error('region')">
+                    <option value="" disabled>Selecciona una región</option>
+                    @for (region of regions; track region) {
+                      <option [value]="region">{{ region }}</option>
+                    }
+                  </select>
+                  <div class="invalid-feedback">{{ error('region') }}</div>
+                </div>
+              </div>
+              <p class="small text-body-secondary mt-4 mb-3">
+                Esta tienda no procesa pagos: la compra es una simulación y no se realizará ningún cobro.
+              </p>
+              <button type="submit" class="btn btn-dark w-100">Confirmar compra</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3">Tu pedido</h2>
+            <ul class="list-unstyled mb-0">
+              @for (item of cart.items(); track item.album.idAlbum) {
+                <li class="d-flex justify-content-between gap-3 mb-2">
+                  <span>{{ item.album.title }} <span class="text-body-secondary">× {{ item.quantity }}</span></span>
+                  <span class="text-nowrap">{{ item.album.price * item.quantity | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</span>
+                </li>
+              }
+            </ul>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total</span>
+              <span class="price">{{ cart.total() | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</span>
+            </div>
+            <a routerLink="/cart" class="btn btn-link px-0 mt-3">Volver al carrito</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>
