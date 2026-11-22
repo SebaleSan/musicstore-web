@@ -1,1 +1,75 @@
-<p>cart works!</p>
+<section class="container py-5">
+  <h1 class="section-title h2 mb-4">Carrito</h1>
+
+  @if (cart.items().length === 0) {
+    <div class="text-center py-5">
+      <p class="lead text-body-secondary mb-4">Tu carrito está vacío.</p>
+      <a routerLink="/catalog" class="btn btn-dark">Ver catálogo</a>
+    </div>
+  } @else {
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <ul class="list-group list-group-flush border rounded">
+          @for (item of cart.items(); track item.album.idAlbum) {
+            <li class="list-group-item py-3">
+              <div class="row g-3 align-items-center">
+                <div class="col-3 col-sm-2">
+                  @if (item.album.coverArt) {
+                    <img class="thumb" [src]="item.album.coverArt" [alt]="item.album.title">
+                  } @else {
+                    <div class="thumb thumb-empty"></div>
+                  }
+                </div>
+                <div class="col-9 col-sm-4">
+                  <a class="fw-bold text-body text-decoration-none" [routerLink]="['/albums', item.album.idAlbum]">
+                    {{ item.album.title }}
+                  </a>
+                  <p class="small text-body-secondary mb-0">{{ item.album.artist }}</p>
+                  <p class="small mb-0">{{ item.album.price | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }} c/u</p>
+                </div>
+                <div class="col-6 col-sm-3">
+                  <div class="input-group input-group-sm quantity" role="group" [attr.aria-label]="'Cantidad de ' + item.album.title">
+                    <button type="button" class="btn btn-outline-dark" aria-label="Quitar una unidad"
+                      [disabled]="item.quantity <= 1" (click)="cart.setQuantity(item.album.idAlbum, item.quantity - 1)">−</button>
+                    <span class="input-group-text bg-white justify-content-center flex-grow-1">{{ item.quantity }}</span>
+                    <button type="button" class="btn btn-outline-dark" aria-label="Agregar una unidad"
+                      [disabled]="item.quantity >= item.album.stock" (click)="cart.setQuantity(item.album.idAlbum, item.quantity + 1)">+</button>
+                  </div>
+                  @if (item.quantity >= item.album.stock) {
+                    <p class="small text-body-secondary mb-0 mt-1">Máximo disponible</p>
+                  }
+                </div>
+                <div class="col-6 col-sm-3 text-end">
+                  <p class="price mb-1">{{ item.album.price * item.quantity | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
+                  <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="cart.remove(item.album.idAlbum)">
+                    Quitar
+                  </button>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+        <button type="button" class="btn btn-link text-danger px-0 mt-2" (click)="clear()">Vaciar carrito</button>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm summary">
+          <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3">Resumen</h2>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Productos</span>
+              <span>{{ cart.count() }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold mb-4">
+              <span>Total</span>
+              <span class="price">{{ cart.total() | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</span>
+            </div>
+            <a routerLink="/checkout" class="btn btn-dark w-100 mb-2">Finalizar compra</a>
+            <a routerLink="/catalog" class="btn btn-outline-dark w-100">Seguir comprando</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>
