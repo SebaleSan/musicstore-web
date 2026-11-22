@@ -16,15 +16,68 @@
     <app-order-history />
   } @else if (auth.profile(); as profile) {
     <div class="row">
-      <div class="col-12 col-md-8 col-lg-6">
-        <dl class="row mb-0">
-          <dt class="col-4">Usuario</dt>
-          <dd class="col-8">{{ profile.username }}</dd>
-          <dt class="col-4">Correo</dt>
-          <dd class="col-8">{{ profile.email }}</dd>
-          <dt class="col-4">Rol</dt>
-          <dd class="col-8">{{ profile.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}</dd>
-        </dl>
+      <div class="col-12 col-md-10 col-lg-7">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <dl class="row mb-4">
+              <dt class="col-4">Usuario</dt>
+              <dd class="col-8">{{ profile.username }}</dd>
+              <dt class="col-4">Rol</dt>
+              <dd class="col-8 mb-0">{{ profile.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}</dd>
+            </dl>
+
+            @if (message(); as message) {
+              <div class="alert py-2" [class.alert-success]="message.ok" [class.alert-danger]="!message.ok" role="alert">
+                {{ message.text }}
+              </div>
+            }
+
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <div class="mb-4">
+                <label for="email" class="form-label">Correo</label>
+                <input id="email" type="email" class="form-control" formControlName="email"
+                  required maxlength="100" autocomplete="email" [class.is-invalid]="emailError()">
+                <div class="invalid-feedback">{{ emailError() }}</div>
+              </div>
+
+              <h2 class="h6 fw-bold mb-1">Cambiar contraseña</h2>
+              <p class="small text-body-secondary mb-3">Déjalo en blanco si no quieres cambiarla.</p>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Nueva contraseña</label>
+                <input id="password" class="form-control" formControlName="password" autocomplete="new-password"
+                  minlength="8" maxlength="100" [pattern]="passwordPattern"
+                  [type]="showPassword() ? 'text' : 'password'" [class.is-invalid]="passwordInvalid()">
+                @if (password()) {
+                  <ul class="list-unstyled small mt-2 mb-0">
+                    @for (rule of rules; track rule.key) {
+                      <li [class.text-success]="rule.test(password())" [class.text-danger]="!rule.test(password())">
+                        {{ rule.test(password()) ? '✓' : '✗' }} {{ rule.label }}
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+                <input id="confirmPassword" class="form-control" formControlName="confirmPassword" autocomplete="new-password"
+                  maxlength="100" [type]="showPassword() ? 'text' : 'password'" [class.is-invalid]="mismatch()">
+                <div class="invalid-feedback">Las contraseñas no coinciden</div>
+              </div>
+
+              <div class="form-check mb-4">
+                <input id="showPassword" class="form-check-input" type="checkbox" [checked]="showPassword()"
+                  (change)="showPassword.set(!showPassword())">
+                <label class="form-check-label" for="showPassword">Mostrar contraseñas</label>
+              </div>
+
+              <button type="submit" class="btn btn-dark" [disabled]="saving()">
+                {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   }
