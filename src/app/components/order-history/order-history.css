@@ -1,0 +1,16 @@
+.thumb {
+  width: 3.5rem;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: var(--bs-border-radius-sm);
+}
+
+.thumb-empty {
+  background: #e9ecef;
+}
+
+.price {
+  color: var(--brand-blue);
+  font-weight: 700;
+}
