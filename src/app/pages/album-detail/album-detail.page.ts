@@ -4,6 +4,8 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Album } from '../../models/album';
 import { AlbumService } from '../../services/album.service';
+import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-album-detail',
@@ -13,8 +15,11 @@ import { AlbumService } from '../../services/album.service';
 })
 export class AlbumDetailPage {
   private readonly albumService = inject(AlbumService);
+  private readonly cart = inject(CartService);
+  protected readonly auth = inject(AuthService);
 
   protected readonly album = signal<Album | null>(null);
+  protected readonly notice = signal<{ text: string; ok: boolean } | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
 
@@ -32,5 +37,11 @@ export class AlbumDetailPage {
         this.loading.set(false);
       },
     });
+  }
+
+  protected addToCart(album: Album): void {
+    this.notice.set(this.cart.add(album)
+      ? { text: 'Se agregó al carrito', ok: true }
+      : { text: 'No hay más stock disponible de este álbum', ok: false });
   }
 }

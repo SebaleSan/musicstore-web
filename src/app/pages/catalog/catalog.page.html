@@ -20,6 +20,11 @@
     <div class="alert alert-danger" role="alert">{{ error() }}</div>
   } @else {
     <p class="text-body-secondary small">{{ filtered().length }} de {{ albums().length }} álbumes</p>
+    @if (notice(); as notice) {
+      <div class="alert py-2 notice" [class.alert-success]="notice.ok" [class.alert-warning]="!notice.ok" role="status">
+        {{ notice.text }}
+      </div>
+    }
     <div class="row g-4">
       @for (album of filtered(); track album.idAlbum) {
         <div class="col-12 col-sm-6 col-lg-3">
@@ -34,7 +39,14 @@
               <h2 class="h6 fw-bold mb-1">{{ album.title }}</h2>
               <p class="text-body-secondary small mb-2">{{ album.artist }}{{ album.year ? ' · ' + album.year : '' }}</p>
               <p class="price mb-3">{{ album.price | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
-              <a class="btn btn-dark mt-auto" [routerLink]="['/albums', album.idAlbum]">Ver detalle</a>
+              <div class="d-grid gap-2 mt-auto">
+                @if (auth.isLoggedIn() && !auth.isAdmin()) {
+                  <button type="button" class="btn btn-dark" [disabled]="album.stock === 0" (click)="addToCart(album)">
+                    {{ album.stock === 0 ? 'Agotado' : 'Agregar al carro' }}
+                  </button>
+                }
+                <a class="btn btn-outline-dark" [routerLink]="['/albums', album.idAlbum]">Ver detalle</a>
+              </div>
             </div>
           </div>
         </div>

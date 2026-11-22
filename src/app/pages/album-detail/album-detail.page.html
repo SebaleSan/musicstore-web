@@ -39,6 +39,20 @@
             }
           </dd>
         </dl>
+
+        @if (auth.isLoggedIn() && !auth.isAdmin()) {
+          <button type="button" class="btn btn-dark btn-lg px-4" [disabled]="album.stock === 0" (click)="addToCart(album)">
+            {{ album.stock === 0 ? 'Agotado' : 'Agregar al carro' }}
+          </button>
+          @if (notice(); as notice) {
+            <div class="alert py-2 mt-3" [class.alert-success]="notice.ok" [class.alert-warning]="!notice.ok" role="status">
+              {{ notice.text }}
+              @if (notice.ok) {
+                <a routerLink="/cart" class="alert-link ms-1">Ver carrito</a>
+              }
+            </div>
+          }
+        }
       </div>
     </div>
   }

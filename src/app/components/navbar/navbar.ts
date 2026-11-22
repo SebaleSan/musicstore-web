@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 export class Navbar {
   private readonly router = inject(Router);
   protected readonly auth = inject(AuthService);
+  protected readonly cart = inject(CartService);
   protected readonly menuOpen = signal(false);
 
   protected toggleMenu(): void {
