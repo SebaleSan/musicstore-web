@@ -1,0 +1,17 @@
+.hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background: linear-gradient(120deg, var(--brand-blue-dark), var(--brand-blue)) center / cover no-repeat;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 1.5rem;
+  height: 2px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  background: #fff;
+}

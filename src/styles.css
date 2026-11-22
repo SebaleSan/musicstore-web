@@ -1,1 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --brand-blue: #1a2f6e;
+  --brand-blue-dark: #0f1d47;
+  --brand-blue-rgb: 26, 47, 110;
+  --bs-body-bg: #fff;
+  --bs-link-color: var(--brand-blue);
+  --bs-link-color-rgb: var(--brand-blue-rgb);
+  --bs-link-hover-color: var(--brand-blue-dark);
+  --bs-link-hover-color-rgb: 15, 29, 71;
+}
+
+body {
+  background: #fff;
+}
+
+.badge-brand {
+  background: var(--brand-blue);
+  color: #fff;
+}
+
+.text-brand {
+  color: var(--brand-blue);
+}
+
+.section-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--brand-blue);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 0.2rem rgba(var(--brand-blue-rgb), 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
