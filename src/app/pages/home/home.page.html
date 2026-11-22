@@ -1,12 +1,98 @@
-<section class="hero">
-  <div class="container py-5">
-    <div class="row">
-      <div class="col-12 col-md-8 col-lg-6">
-        <p class="eyebrow small fw-semibold mb-3">J-Rock · J-Metal · Visual Kei</p>
-        <h1 class="display-5 fw-bold text-uppercase">El sonido de Japón en tu colección</h1>
-        <p class="lead mb-4">Vinilos y CDs de las bandas de rock y metal japonés, con envío a todo Chile.</p>
-        <a routerLink="/catalog" class="btn btn-dark btn-lg px-4">Ver catálogo</a>
+@if (featured().length) {
+  <section class="hero" aria-roledescription="carrusel" aria-label="Álbumes destacados"
+    (mouseenter)="paused.set(true)" (mouseleave)="paused.set(false)"
+    (focusin)="paused.set(true)" (focusout)="paused.set(false)">
+    @for (album of featured(); track album.idAlbum; let i = $index) {
+      <div class="slide" [class.active]="i === current()" [attr.aria-hidden]="i !== current()" [attr.inert]="i !== current() ? '' : null"
+        aria-roledescription="diapositiva" [attr.aria-label]="(i + 1) + ' de ' + featured().length">
+        <div class="slide-bg" [style.background-image]="'url(' + album.coverArt + ')'"></div>
+        <div class="container position-relative py-5">
+          <div class="row align-items-center g-4">
+            <div class="col-12 col-md-7 col-lg-6">
+              <p class="eyebrow small fw-semibold mb-3">J-Rock · J-Metal · Visual Kei</p>
+              <h2 class="display-5 fw-bold text-uppercase mb-2">{{ album.title }}</h2>
+              <p class="lead mb-3">{{ album.artist }}{{ album.year ? ' · ' + album.year : '' }}</p>
+              <p class="h4 fw-bold mb-4">{{ album.price | currency: 'CLP' : 'symbol-narrow' : '1.0-0' }}</p>
+              <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-dark btn-lg px-4" [routerLink]="['/albums', album.idAlbum]">Ver detalle</a>
+                <a class="btn btn-outline-light btn-lg px-4" routerLink="/catalog">Ver catálogo</a>
+              </div>
+            </div>
+            <div class="col-md-5 offset-lg-1 d-none d-md-block text-center">
+              <img class="slide-cover" [src]="album.coverArt" [alt]="album.title + ' de ' + album.artist">
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <button type="button" class="hero-control hero-prev" aria-label="Álbum anterior" (click)="previous()">‹</button>
+    <button type="button" class="hero-control hero-next" aria-label="Álbum siguiente" (click)="next()">›</button>
+
+    <div class="hero-indicators">
+      @for (album of featured(); track album.idAlbum; let i = $index) {
+        <button type="button" [class.active]="i === current()" [attr.aria-label]="'Ver ' + album.title"
+          [attr.aria-current]="i === current()" (click)="current.set(i)"></button>
+      }
+    </div>
+  </section>
+} @else {
+  <section class="hero hero-static">
+    <div class="container py-5">
+      <p class="eyebrow small fw-semibold mb-3">J-Rock · J-Metal · Visual Kei</p>
+      <h1 class="display-5 fw-bold text-uppercase">El sonido de Japón en tu colección</h1>
+      <p class="lead mb-4">Vinilos y CDs de las bandas de rock y metal japonés, con envío a todo Chile.</p>
+      <a routerLink="/catalog" class="btn btn-dark btn-lg px-4">Ver catálogo</a>
+    </div>
+  </section>
+}
+
+<section class="container py-5">
+  <p class="small fw-semibold mb-1">Recién llegados</p>
+  <h2 class="section-title h3 mb-4">Novedades</h2>
+
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-brand" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="row g-3 g-md-4">
+      @for (album of latest(); track album.idAlbum) {
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="tile shadow-sm">
+            @if (album.coverArt) {
+              <img [src]="album.coverArt" [alt]="album.title + ' de ' + album.artist">
+            } @else {
+              <div class="tile-empty">{{ album.title }}</div>
+            }
+            <div class="tile-overlay">
+              <p class="fw-bold mb-0 text-truncate">{{ album.title }}</p>
+              <p class="small mb-2 text-truncate">{{ album.artist }}</p>
+              <div class="d-grid gap-1">
+                <a class="btn btn-light btn-sm" [routerLink]="['/albums', album.idAlbum]">Ver detalle</a>
+                @if (auth.isLoggedIn() && !auth.isAdmin()) {
+                  <button type="button" class="btn btn-dark btn-sm" [disabled]="album.stock === 0" (click)="addToCart(album)">
+                    {{ album.stock === 0 ? 'Agotado' : 'Agregar al carro' }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <p class="text-body-secondary">No hay álbumes disponibles por ahora.</p>
+      }
+    </div>
+    <div class="text-center mt-4">
+      <a routerLink="/catalog" class="btn btn-outline-dark">Ver todo el catálogo</a>
+    </div>
+  }
 </section>
+
+@if (notice(); as notice) {
+  <div class="alert py-2 notice" [class.alert-success]="notice.ok" [class.alert-warning]="!notice.ok" role="status">
+    {{ notice.text }}
+  </div>
+}
