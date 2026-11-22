@@ -1,0 +1,18 @@
+.thumb {
+  width: 2.75rem;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: var(--bs-border-radius-sm);
+}
+
+.thumb-empty {
+  background: #e9ecef;
+}
+
+@media (min-width: 992px) {
+  .form-card {
+    position: sticky;
+    top: 5rem;
+  }
+}
