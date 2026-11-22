@@ -8,12 +8,14 @@ interface Session {
   token: string;
 }
 
+const STORAGE_KEY = 'music-store-session';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly session = signal<Session | null>(null);
+  private readonly session = signal<Session | null>(this.restore());
 
   readonly profile = computed(() => this.session()?.profile ?? null);
   readonly isLoggedIn = computed(() => this.session() !== null);
@@ -28,7 +30,7 @@ export class AuthService {
     const headers = new HttpHeaders({ Authorization: `Basic ${token}` });
     return this.http
       .post<Profile>('/api/auth/login', null, { headers })
-      .pipe(tap(profile => this.session.set({ profile, token })));
+      .pipe(tap(profile => this.save({ profile, token })));
   }
 
   updateSession(profile: Profile, newPassword?: string): void {
@@ -37,11 +39,29 @@ export class AuthService {
       return;
     }
     const token = newPassword ? this.encode(profile.username, newPassword) : current.token;
-    this.session.set({ profile, token });
+    this.save({ profile, token });
   }
 
   logout(): void {
-    this.session.set(null);
+    this.save(null);
+  }
+
+  private save(session: Session | null): void {
+    this.session.set(session);
+    if (session) {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+    } else {
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+  }
+
+  private restore(): Session | null {
+    try {
+      const stored = sessionStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
   }
 
   private encode(username: string, password: string): string {
