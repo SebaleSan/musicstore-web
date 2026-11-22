@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin-guard';
 import { authGuard } from './guards/auth-guard';
+import { customerGuard } from './guards/customer-guard';
 
 export const routes: Routes = [
   {
@@ -42,25 +43,25 @@ export const routes: Routes = [
   {
     path: 'cart',
     title: 'Carrito | Music Store',
-    canActivate: [authGuard],
+    canActivate: [customerGuard],
     loadComponent: () => import('./pages/cart/cart.page').then(m => m.CartPage),
   },
   {
     path: 'checkout',
     title: 'Finalizar compra | Music Store',
-    canActivate: [authGuard],
+    canActivate: [customerGuard],
     loadComponent: () => import('./pages/checkout/checkout.page').then(m => m.CheckoutPage),
   },
   {
     path: 'orders',
     title: 'Mis compras | Music Store',
-    canActivate: [authGuard],
+    canActivate: [customerGuard],
     loadComponent: () => import('./pages/orders/orders.page').then(m => m.OrdersPage),
   },
   {
     path: 'admin/albums',
     title: 'Administrar álbumes | Music Store',
-    canActivate: [authGuard, adminGuard],
+    canActivate: [adminGuard],
     loadComponent: () => import('./pages/admin-albums/admin-albums.page').then(m => m.AdminAlbumsPage),
   },
   { path: '**', redirectTo: '' },
