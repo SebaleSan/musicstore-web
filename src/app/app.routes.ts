@@ -58,11 +58,5 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('./pages/admin-albums/admin-albums.page').then(m => m.AdminAlbumsPage),
   },
-  {
-    path: 'admin/users',
-    title: 'Administrar usuarios | Music Store',
-    canActivate: [adminGuard],
-    loadComponent: () => import('./pages/admin-users/admin-users.page').then(m => m.AdminUsersPage),
-  },
   { path: '**', redirectTo: '' },
 ];
