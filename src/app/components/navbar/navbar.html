@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-lg sticky-top bg-white border-bottom">
   <div class="container">
-    <a class="navbar-brand" routerLink="/" (click)="closeMenu()">MUSIC<span>STORE</span></a>
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/" (click)="closeMenu()">
+      <img src="logo.svg" alt="" width="32" height="32">
+      <span class="brand-text">MUSIC<span>STORE</span></span>
+    </a>
     <button class="navbar-toggler" type="button" aria-controls="mainNav" aria-label="Abrir menú"
       [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
       <span class="navbar-toggler-icon"></span>
@@ -25,9 +28,6 @@
         @if (auth.isAdmin()) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/admin/albums" routerLinkActive="active" (click)="closeMenu()">Gestión de catálogo</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/admin/users" routerLinkActive="active" (click)="closeMenu()">Gestión de usuarios</a>
           </li>
         }
       </ul>

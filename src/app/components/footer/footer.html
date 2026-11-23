@@ -1,0 +1,45 @@
+<footer class="footer mt-auto">
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-5">
+        <a class="brand d-inline-flex align-items-center gap-2" routerLink="/">
+          <img src="logo.svg" alt="" width="36" height="36">
+          <span>MUSIC<span class="brand-accent">STORE</span></span>
+        </a>
+        <p class="small mt-3 mb-0">
+          Vinilos y CDs de J-Rock, J-Metal y Visual Kei. Las bandas de Japón que marcan la escena, en tu colección.
+        </p>
+      </div>
+      <div class="col-6 col-md-3 offset-lg-1">
+        <h2 class="h6 text-uppercase fw-bold mb-3">Tienda</h2>
+        <ul class="list-unstyled small mb-0">
+          <li class="mb-2"><a routerLink="/">Inicio</a></li>
+          <li class="mb-2"><a routerLink="/catalog">Catálogo</a></li>
+          <li><a routerLink="/catalog" fragment="search">Buscar</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-3">
+        <h2 class="h6 text-uppercase fw-bold mb-3">Mi cuenta</h2>
+        <ul class="list-unstyled small mb-0">
+          @if (auth.isLoggedIn()) {
+            <li class="mb-2"><a routerLink="/profile">Mi perfil</a></li>
+            @if (!auth.isAdmin()) {
+              <li class="mb-2"><a routerLink="/cart">Carrito</a></li>
+              <li><a routerLink="/profile" [queryParams]="{ tab: 'orders' }">Mis compras</a></li>
+            }
+          } @else {
+            <li class="mb-2"><a routerLink="/login">Iniciar sesión</a></li>
+            <li class="mb-2"><a routerLink="/register">Crear cuenta</a></li>
+            <li><a routerLink="/recover-password">Recuperar contraseña</a></li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container py-3 small d-flex flex-column flex-md-row justify-content-between gap-1">
+      <span>© {{ year }} Music Store</span>
+      <span>Proyecto académico · Las compras son simuladas y no se realizan cobros.</span>
+    </div>
+  </div>
+</footer>

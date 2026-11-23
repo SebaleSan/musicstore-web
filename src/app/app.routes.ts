@@ -53,22 +53,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/checkout/checkout.page').then(m => m.CheckoutPage),
   },
   {
-    path: 'orders',
-    title: 'Mis compras | Music Store',
-    canActivate: [customerGuard],
-    loadComponent: () => import('./pages/orders/orders.page').then(m => m.OrdersPage),
-  },
-  {
     path: 'admin/albums',
     title: 'Administrar álbumes | Music Store',
     canActivate: [adminGuard],
     loadComponent: () => import('./pages/admin-albums/admin-albums.page').then(m => m.AdminAlbumsPage),
-  },
-  {
-    path: 'admin/users',
-    title: 'Administrar usuarios | Music Store',
-    canActivate: [adminGuard],
-    loadComponent: () => import('./pages/admin-users/admin-users.page').then(m => m.AdminUsersPage),
   },
   { path: '**', redirectTo: '' },
 ];
